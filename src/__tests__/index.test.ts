@@ -1,5 +1,6 @@
 import { runSequence } from "../index";
 import { RunSequenceStep } from "../types";
+import { test, expect, vi } from "vitest";
 
 const success: RunSequenceStep = () => Promise.resolve();
 const failure: RunSequenceStep = () => Promise.reject();
@@ -49,7 +50,7 @@ test("should stop with an errorMessage, when rejected with Error", async () => {
 });
 
 test("should trigger status callback after each successful promise", async () => {
-  const callback = jest.fn();
+  const callback = vi.fn();
   await runSequence([success, success, success], callback);
   expect(callback).toHaveBeenCalledTimes(3);
   expect(callback).toHaveBeenLastCalledWith(2);
