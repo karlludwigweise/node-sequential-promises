@@ -48,7 +48,9 @@ export const runSequence = async (
           // Statistics
           started.push(i);
           if (i - 1 >= 0) {
-            status && status(i - 1);
+            if (status) {
+              status(i - 1);
+            }
             fulfilled.push(i - 1);
           }
 
@@ -70,7 +72,9 @@ export const runSequence = async (
 
   // Statistics
   if (success) {
-    status && status(steps.length - 1);
+    if (status) {
+      status(steps.length - 1);
+    }
     fulfilled.push(steps.length - 1);
   }
 
