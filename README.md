@@ -61,3 +61,15 @@ A negative result (2nd async function failed):
   errorMessage: "Your Error Message Here",
 }
 ```
+
+## Status Callback
+
+You can add a status callback function that will let you know, when each promise resolved.
+
+```
+const status = (index: number) => {
+  // sends the index of the resolved promise
+  // do something with it
+};
+const result = await runSequence([myAsyncFunc1, myAsyncFunc2, myAsyncFunc3], status);
+```

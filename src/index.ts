@@ -8,7 +8,8 @@ import { RunSequenceError, RunSequenceResult, RunSequenceStep } from "./types";
  * @example
  * ```typescript
  * const success = () => Promise.resolve();
- * const result = await runSequence([success, success]);
+ * const statusCallback = (index) => void;
+ * const result = await runSequence([success, success], statusCallback);
  *
  * // Returns
  * {
@@ -18,7 +19,10 @@ import { RunSequenceError, RunSequenceResult, RunSequenceStep } from "./types";
  * }
  * ```
  */
-export const runSequence = async (steps: RunSequenceStep[]): Promise<RunSequenceResult> => {
+export const runSequence = async (
+  steps: RunSequenceStep[],
+  status?: (index: number) => void,
+): Promise<RunSequenceResult> => {
   if (steps.length === 0) {
     return Promise.resolve({ success: true, started: [], fulfilled: [] });
   }
@@ -44,6 +48,7 @@ export const runSequence = async (steps: RunSequenceStep[]): Promise<RunSequence
           // Statistics
           started.push(i);
           if (i - 1 >= 0) {
+            status && status(i - 1);
             fulfilled.push(i - 1);
           }
 
@@ -65,6 +70,7 @@ export const runSequence = async (steps: RunSequenceStep[]): Promise<RunSequence
 
   // Statistics
   if (success) {
+    status && status(steps.length - 1);
     fulfilled.push(steps.length - 1);
   }
 

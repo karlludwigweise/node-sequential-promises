@@ -47,3 +47,10 @@ test("should stop with an errorMessage, when rejected with Error", async () => {
   const received = await runSequence([success, failureWithError, success]);
   expect(received).toEqual(expected);
 });
+
+test("should trigger status callback after each successful promise", async () => {
+  const callback = jest.fn();
+  await runSequence([success, success, success], callback);
+  expect(callback).toHaveBeenCalledTimes(3);
+  expect(callback).toHaveBeenLastCalledWith(2);
+});
